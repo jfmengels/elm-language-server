@@ -136,4 +136,49 @@ outer something =
       expectedSource,
     );
   });
+
+  it("can infer parameters that are aliased", async () => {
+    const source = `
+--@ Browser.Navigation.elm
+module Browser.Navigation exposing
+  ( Key
+  , replaceUrl
+  )
+
+type Key = Key
+
+replaceUrl : Key -> String -> Cmd msg
+replaceUrl =
+  Elm.Kernel.Browser.replaceUrl
+
+--@ Test.elm
+module Test exposing (..)
+
+import Browser.Navigation as Nav
+
+
+replaceUrl : Route -> Cmd msg
+replaceUrl route =
+    Nav.replaceUrl key (routeToString route)
+                  --^
+`;
+
+    const expectedSource = `
+--@ Test.elm
+module Test exposing (..)
+
+import Browser.Navigation as Nav
+
+
+replaceUrl : Route - Nav.key -> Cmd msg
+replaceUrl route key =
+    Nav.replaceUrl key (routeToString route)
+`;
+
+    await testCodeAction(
+      source,
+      [{ title: `Add new parameter to 'replaceUrl'` }],
+      expectedSource,
+    );
+  });
 });
