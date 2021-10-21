@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test formatting normal format gives correct result 1`] = `
+Array [
+  Object {
+    "newText": " exposing (..)
+",
+    "range": Object {
+      "end": Object {
+        "character": 11,
+        "line": 0,
+      },
+      "start": Object {
+        "character": 11,
+        "line": 0,
+      },
+    },
+  },
+]
+`;
